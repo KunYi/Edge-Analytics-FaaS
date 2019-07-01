@@ -38,7 +38,8 @@ RUN mkdir -p /opt/cmake/bin
 ENV PATH /opt/cmake/bin:$PATH
 
 RUN wget https://github.com/Kitware/CMake/releases/download/v3.13.2/cmake-3.13.2-Linux-x86_64.tar.gz && \
-    tar -xf cmake-3.13.2-Linux-x86_64.tar.gz --strip 1 -C /opt/cmake
+    tar -xf cmake-3.13.2-Linux-x86_64.tar.gz --strip 1 -C /opt/cmake && \
+    rm -rf cmake-*-Linux-x86_64.tar.gz
 
 RUN /bin/bash -c "source /opt/intel/computer_vision_sdk/bin/setupvars.sh" && \
     git clone --recursive -b $branch https://github.com/intel/onnxruntime /onnxruntime && \
