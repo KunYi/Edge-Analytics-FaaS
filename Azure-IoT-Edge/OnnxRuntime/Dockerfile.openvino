@@ -30,6 +30,11 @@ FROM ubuntu:16.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
+# for special version package
+ARG VER_PIP=19.1.1
+ARG VER_SETUP_TOOLS=41.0.1
+ARG VER_DLIB=19.7.0
+
 ENV LD_LIBRARY_PATH=/usr/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 
 RUN apt update && \
@@ -37,11 +42,15 @@ RUN apt update && \
     libgtk2.0-dev libgtk-3-dev libcanberra-gtk-module libcanberra-gtk3-module \
     python3.5 python3-pip python3.5-dev python3-tk zip x11-apps lsb-core wget cpio sudo libboost-python-dev \
     libjpeg-dev libpng-dev zlib1g-dev git libnuma1 ocl-icd-libopencl1 clinfo \
-    libboost-filesystem1.58.0 libboost-thread1.58.0 protobuf-compiler libprotoc-dev && \
-    pip3 install --upgrade pip setuptools && \
+    libboost-filesystem1.58.0 libboost-thread1.58.0 protobuf-compiler libprotoc-dev \
+    cmake cmake-data libavcodec-dev libavformat-dev libavutil-dev libcurl3 \
+    libjsoncpp1 libswresample-dev libswscale-dev libusb-1.0-0-dev libusb-1.0-doc && \
+    \
+    pip3 install --upgrade pip==$VER_PIP setuptools==$VER_SETUP_TOOLS && \
     sed -i "s/from pip import main/from pip import __main__/" /usr/bin/pip3 && \
     sed -i "s/sys.exit(main())/sys.exit(__main__._main())/" /usr/bin/pip3 && \
-    pip3 install scipy sklearn scikit-image pandas matplotlib imutils requests numpy networkx opencv-python dlib Pillow
+    pip3 install scipy sklearn scikit-image pandas matplotlib imutils requests \
+       numpy networkx opencv-python Pillow dlib==$VER_DLIB
 
 ENV pattern="COMPONENTS=DEFAULTS"
 ENV replacement="COMPONENTS=intel-inference_engine_sdk__noarch;intel-inference_engine_cpu__noarch;intel-inference_engine_gpu__noarch;intel-inference_engine_vpu__noarch;intel-inference_engine_gna__noarch;intel-inference_engine_hddl__noarch;intel-model_optimizer__noarch;intel-opencv_ubuntu_16_rel__noarch"
